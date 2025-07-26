@@ -1,0 +1,748 @@
+/* Modern Parfume Store - Luxury Design */
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+:root {
+    /* Palette de couleurs moderne et luxueuse */
+    --primary-color: #1a1a2e;
+    --secondary-color: #16213e;
+    --accent-color: #e94560;
+    --gold-accent: #f39c12;
+    --text-dark: #2c3e50;
+    --text-light: #6c757d;
+    --bg-light: #f8f9fa;
+    --bg-white: #ffffff;
+    --border-light: #e9ecef;
+
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    --gradient-luxury: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    --gradient-accent: linear-gradient(135deg, #e94560 0%, #f39c12 100%);
+
+    /* Shadows */
+    --shadow-sm: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+    --shadow-lg: 0 10px 25px rgba(0,0,0,0.15);
+    --shadow-xl: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg-light);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+/* Navigation moderne */
+.navbar {
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.95) !important;
+    box-shadow: var(--shadow-sm);
+    transition: all 0.3s ease;
+}
+
+.navbar-brand {
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: var(--primary-color) !important;
+    text-decoration: none;
+}
+
+.navbar-brand:hover {
+    color: var(--accent-color) !important;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: var(--text-dark) !important;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+}
+
+.navbar-nav .nav-link:hover {
+    color: var(--accent-color) !important;
+}
+
+/* Hero section luxueux */
+.hero-section {
+    background: var(--gradient-luxury);
+    color: white;
+    padding: 120px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+}
+
+.hero-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.hero-section h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    margin-bottom: 1.5rem;
+    font-weight: 600;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease-out;
+}
+
+.hero-section p {
+    font-size: 1.3rem;
+    margin-bottom: 2.5rem;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease-out 0.2s both;
+}
+
+.hero-section .btn {
+    animation: fadeInUp 1s ease-out 0.4s both;
+}
+
+/* Cards produits modernes */
+.product-card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+    height: 100%;
+    background: var(--bg-white);
+    overflow: hidden;
+    position: relative;
+}
+
+.product-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--gradient-accent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 1;
+}
+
+.product-card:hover {
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: var(--shadow-xl);
+}
+
+.product-card:hover::before {
+    opacity: 0.05;
+}
+
+.product-card .card-body {
+    position: relative;
+    z-index: 2;
+    padding: 1.5rem;
+}
+
+.product-image {
+    height: 280px;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.product-card:hover .product-image {
+    transform: scale(1.1);
+}
+
+.product-price {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    font-family: 'Playfair Display', serif;
+}
+
+.product-card .card-title {
+    font-weight: 600;
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+}
+
+.product-card .card-text {
+    color: var(--text-light);
+    font-size: 0.9rem;
+}
+
+/* Boutons modernes */
+.btn {
+    border-radius: 50px;
+    font-weight: 600;
+    padding: 12px 30px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.btn-primary {
+    background: var(--gradient-accent);
+    border: none;
+    color: white;
+    box-shadow: var(--shadow-md);
+}
+
+.btn-primary:hover {
+    background: var(--gradient-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    filter: brightness(1.1);
+}
+
+.btn-outline-primary {
+    color: var(--accent-color);
+    border: 2px solid var(--accent-color);
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background: var(--accent-color);
+    border-color: var(--accent-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.btn-light {
+    background: rgba(255, 255, 255, 0.9);
+    border: none;
+    color: var(--primary-color);
+    backdrop-filter: blur(10px);
+}
+
+.btn-light:hover {
+    background: white;
+    color: var(--accent-color);
+    transform: translateY(-2px);
+}
+
+/* Administration moderne */
+.admin-sidebar {
+    background: var(--gradient-luxury);
+    min-height: calc(100vh - 56px);
+    box-shadow: var(--shadow-lg);
+}
+
+.admin-sidebar .nav-link {
+    color: rgba(255, 255, 255, 0.8);
+    padding: 18px 25px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.admin-sidebar .nav-link:hover {
+    color: white;
+    background: rgba(233, 69, 96, 0.2);
+    transform: translateX(5px);
+}
+
+.admin-sidebar .nav-link.active {
+    color: white;
+    background: var(--gradient-accent);
+    border-left: 4px solid var(--gold-accent);
+}
+
+.admin-card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-md);
+    border-left: 4px solid var(--accent-color);
+    transition: transform 0.3s ease;
+}
+
+.admin-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+}
+
+.stats-card {
+    background: var(--gradient-primary);
+    color: white;
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    box-shadow: var(--shadow-lg);
+    transition: transform 0.3s ease;
+}
+
+.stats-card:hover {
+    transform: translateY(-5px);
+}
+
+.stats-card h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.8rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.cart-item {
+    border-bottom: 1px solid #dee2e6;
+    padding: 20px 0;
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.quantity-input {
+    width: 80px;
+    text-align: center;
+}
+
+.order-status {
+    padding: 5px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+}
+
+.status-pending {
+    background-color: #fff3cd;
+    color: #856404;
+}
+
+.status-confirmed {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-shipped {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.status-delivered {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.status-cancelled {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.search-box {
+    border-radius: 25px;
+    padding: 10px 20px;
+}
+
+.filter-section {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.animate-pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Sections et catégories */
+.category-filter {
+    background: var(--bg-white);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: var(--shadow-md);
+    margin-bottom: 30px;
+    border: 1px solid var(--border-light);
+}
+
+.filter-section {
+    background: var(--bg-white);
+    border-radius: 20px;
+    padding: 25px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border-light);
+}
+
+.search-box {
+    border-radius: 50px;
+    padding: 15px 25px;
+    border: 2px solid var(--border-light);
+    transition: all 0.3s ease;
+}
+
+.search-box:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.25);
+}
+
+/* Panier et commandes */
+.cart-item {
+    border-bottom: 1px solid var(--border-light);
+    padding: 25px 0;
+    transition: background-color 0.3s ease;
+}
+
+.cart-item:hover {
+    background-color: rgba(233, 69, 96, 0.02);
+}
+
+.cart-item:last-child {
+    border-bottom: none;
+}
+
+.quantity-input {
+    width: 80px;
+    text-align: center;
+    border-radius: 10px;
+    border: 2px solid var(--border-light);
+}
+
+/* Statuts des commandes */
+.order-status {
+    padding: 8px 16px;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.status-pending {
+    background: linear-gradient(135deg, #fff3cd, #ffeaa7);
+    color: #856404;
+}
+
+.status-confirmed {
+    background: linear-gradient(135deg, #d1ecf1, #74b9ff);
+    color: #0c5460;
+}
+
+.status-shipped {
+    background: linear-gradient(135deg, #d4edda, #00b894);
+    color: #155724;
+}
+
+.status-delivered {
+    background: linear-gradient(135deg, #d1f2eb, #00cec9);
+    color: #0c5460;
+}
+
+.status-cancelled {
+    background: linear-gradient(135deg, #f8d7da, #e17055);
+    color: #721c24;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 80px 0;
+    }
+
+    .hero-section h1 {
+        font-size: 2.8rem;
+    }
+
+    .hero-section p {
+        font-size: 1.1rem;
+    }
+
+    .product-card {
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        padding: 10px 25px;
+        font-size: 0.8rem;
+    }
+
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+}
+
+/* Formulaires modernes */
+.form-control {
+    border-radius: 12px;
+    border: 2px solid var(--border-light);
+    padding: 12px 18px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.form-control:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.15);
+    transform: translateY(-1px);
+}
+
+.form-select {
+    border-radius: 12px;
+    border: 2px solid var(--border-light);
+    padding: 12px 18px;
+    transition: all 0.3s ease;
+}
+
+.form-select:focus {
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.2rem rgba(233, 69, 96, 0.15);
+}
+
+/* Cards et sections */
+.card {
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: var(--shadow-lg);
+}
+
+.card-header {
+    background: var(--bg-white);
+    border-bottom: 2px solid var(--border-light);
+    border-radius: 20px 20px 0 0 !important;
+    padding: 20px 25px;
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+/* Badges modernes */
+.badge {
+    border-radius: 25px;
+    padding: 8px 15px;
+    font-weight: 600;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.bg-primary {
+    background: var(--gradient-accent) !important;
+}
+
+.bg-success {
+    background: linear-gradient(135deg, #00b894, #00cec9) !important;
+}
+
+.bg-warning {
+    background: linear-gradient(135deg, #fdcb6e, #e17055) !important;
+}
+
+.bg-info {
+    background: linear-gradient(135deg, #74b9ff, #0984e3) !important;
+}
+
+/* Footer moderne */
+footer {
+    background: var(--gradient-luxury) !important;
+    color: white;
+    margin-top: 60px;
+}
+
+/* Effets de survol pour les liens */
+a {
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: var(--accent-color);
+}
+
+/* Tables modernes */
+.table {
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: var(--shadow-md);
+}
+
+.table thead th {
+    background: var(--gradient-luxury);
+    color: white;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-size: 0.85rem;
+}
+
+.table tbody tr {
+    transition: background-color 0.3s ease;
+}
+
+.table tbody tr:hover {
+    background-color: rgba(233, 69, 96, 0.05);
+}
+
+/* Alertes modernes */
+.alert {
+    border: none;
+    border-radius: 15px;
+    padding: 20px 25px;
+    font-weight: 500;
+    box-shadow: var(--shadow-sm);
+}
+
+.alert-success {
+    background: linear-gradient(135deg, rgba(0, 184, 148, 0.1), rgba(0, 206, 201, 0.1));
+    color: #00b894;
+    border-left: 4px solid #00b894;
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, rgba(233, 69, 96, 0.1), rgba(225, 112, 85, 0.1));
+    color: #e94560;
+    border-left: 4px solid #e94560;
+}
+
+/* Styles spécifiques pour les nouvelles sections */
+.category-card {
+    transition: all 0.4s ease;
+    border: none;
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: var(--shadow-xl);
+}
+
+.category-icon {
+    transition: transform 0.3s ease;
+}
+
+.category-card:hover .category-icon {
+    transform: scale(1.1);
+}
+
+.feature-card {
+    background: var(--bg-white);
+    border-radius: 20px;
+    box-shadow: var(--shadow-md);
+    transition: all 0.4s ease;
+    height: 100%;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+}
+
+.feature-icon {
+    transition: transform 0.3s ease;
+}
+
+.feature-card:hover .feature-icon {
+    transform: scale(1.1);
+}
+
+/* Navigation fixe */
+.navbar.fixed-top {
+    transition: all 0.3s ease;
+}
+
+/* Amélioration des produits vedettes */
+.product-card .btn-group {
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.product-card:hover .btn-group {
+    opacity: 1;
+}
+
+/* Styles pour les badges de notification */
+.badge.position-absolute {
+    font-size: 0.6rem !important;
+    min-width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Amélioration des sections */
+.display-5, .display-6 {
+    font-family: 'Playfair Display', serif;
+}
+
+/* Styles pour les alertes modernes */
+.modern-alert {
+    backdrop-filter: blur(10px);
+    border: none !important;
+}
+
+/* Animation pour les éléments au scroll */
+.fade-in-up {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease;
+}
+
+.fade-in-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Amélioration du footer */
+footer {
+    position: relative;
+    overflow: hidden;
+}
+
+footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="footerGrain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="white" opacity="0.05"/></pattern></defs><rect width="100" height="100" fill="url(%23footerGrain)"/></svg>');
+    opacity: 0.3;
+}
+
+footer .container {
+    position: relative;
+    z-index: 2;
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, rgba(253, 203, 110, 0.1), rgba(225, 112, 85, 0.1));
+    color: #fdcb6e;
+    border-left: 4px solid #fdcb6e;
+}
+
+.alert-info {
+    background: linear-gradient(135deg, rgba(116, 185, 255, 0.1), rgba(9, 132, 227, 0.1));
+    color: #74b9ff;
+    border-left: 4px solid #74b9ff;
+}
