@@ -1,0 +1,268 @@
+# English translations for Velours Parfum
+# Copyright (C) 2024 Velours Parfum
+# This file is distributed under the same license as the Velours Parfum project.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Velours Parfum 1.0\n"
+"Report-Msgid-Bugs-To: admin@velours-parfum.com\n"
+"POT-Creation-Date: 2024-07-26 02:00+0000\n"
+"PO-Revision-Date: 2024-07-26 02:00+0000\n"
+"Last-Translator: Velours Parfum Team\n"
+"Language: en\n"
+"Language-Team: English\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.12.1\n"
+
+# Navigation
+msgid "Accueil"
+msgstr "Home"
+
+msgid "Produits"
+msgstr "Products"
+
+msgid "Panier"
+msgstr "Cart"
+
+msgid "Admin"
+msgstr "Admin"
+
+msgid "Connexion"
+msgstr "Login"
+
+msgid "Inscription"
+msgstr "Register"
+
+msgid "Déconnexion"
+msgstr "Logout"
+
+msgid "Mon Profil"
+msgstr "My Profile"
+
+msgid "Mes Commandes"
+msgstr "My Orders"
+
+# Home page
+msgid "Bienvenue chez Velours Parfum"
+msgstr "Welcome to Velours Parfum"
+
+msgid "Découvrez notre collection exclusive de parfums de luxe et laissez-vous envoûter par des fragrances veloutées d'exception"
+msgstr "Discover our exclusive collection of luxury perfumes and let yourself be enchanted by exceptional velvety fragrances"
+
+msgid "Découvrir nos produits"
+msgstr "Discover our products"
+
+msgid "Explorer"
+msgstr "Explore"
+
+msgid "Produits en vedette"
+msgstr "Featured Products"
+
+msgid "Nos Catégories"
+msgstr "Our Categories"
+
+# Product page
+msgid "Filtres"
+msgstr "Filters"
+
+msgid "Recherche"
+msgstr "Search"
+
+msgid "Nom du parfum..."
+msgstr "Perfume name..."
+
+msgid "Catégorie"
+msgstr "Category"
+
+msgid "Toutes les catégories"
+msgstr "All categories"
+
+msgid "Prix"
+msgstr "Price"
+
+msgid "Marque"
+msgstr "Brand"
+
+msgid "Toutes les marques"
+msgstr "All brands"
+
+msgid "Trier par"
+msgstr "Sort by"
+
+msgid "Plus récent"
+msgstr "Newest"
+
+msgid "Prix croissant"
+msgstr "Price: Low to High"
+
+msgid "Prix décroissant"
+msgstr "Price: High to Low"
+
+msgid "Nom A-Z"
+msgstr "Name A-Z"
+
+msgid "Nom Z-A"
+msgstr "Name Z-A"
+
+msgid "Appliquer les filtres"
+msgstr "Apply filters"
+
+msgid "Réinitialiser"
+msgstr "Reset"
+
+# Product details
+msgid "Description"
+msgstr "Description"
+
+msgid "Aucune description disponible."
+msgstr "No description available."
+
+msgid "Ajouter au panier"
+msgstr "Add to cart"
+
+msgid "Quantité"
+msgstr "Quantity"
+
+msgid "En stock"
+msgstr "In stock"
+
+msgid "Rupture de stock"
+msgstr "Out of stock"
+
+msgid "Informations produit"
+msgstr "Product information"
+
+msgid "Volume"
+msgstr "Volume"
+
+msgid "Genre"
+msgstr "Gender"
+
+# Cart
+msgid "Mon Panier"
+msgstr "My Cart"
+
+msgid "Votre panier est vide"
+msgstr "Your cart is empty"
+
+msgid "Découvrez notre sélection de parfums et ajoutez vos favoris !"
+msgstr "Discover our selection of perfumes and add your favorites!"
+
+msgid "Sous-total"
+msgstr "Subtotal"
+
+msgid "Total"
+msgstr "Total"
+
+msgid "Finaliser la commande"
+msgstr "Checkout"
+
+msgid "Continuer les achats"
+msgstr "Continue shopping"
+
+# Authentication
+msgid "Email"
+msgstr "Email"
+
+msgid "Mot de passe"
+msgstr "Password"
+
+msgid "Se connecter"
+msgstr "Sign in"
+
+msgid "Pas encore de compte ?"
+msgstr "Don't have an account?"
+
+msgid "Créer un compte"
+msgstr "Create account"
+
+msgid "Nom d'utilisateur"
+msgstr "Username"
+
+msgid "Confirmer le mot de passe"
+msgstr "Confirm password"
+
+msgid "S'inscrire"
+msgstr "Sign up"
+
+msgid "Déjà un compte ?"
+msgstr "Already have an account?"
+
+# Footer
+msgid "Votre destination pour les parfums de luxe"
+msgstr "Your destination for luxury perfumes"
+
+msgid "Tous droits réservés."
+msgstr "All rights reserved."
+
+# Admin
+msgid "Dashboard"
+msgstr "Dashboard"
+
+msgid "Gestion des produits"
+msgstr "Product management"
+
+msgid "Gestion des commandes"
+msgstr "Order management"
+
+msgid "Gestion des utilisateurs"
+msgstr "User management"
+
+msgid "Statistiques"
+msgstr "Statistics"
+
+# Messages
+msgid "Produit ajouté au panier avec succès !"
+msgstr "Product added to cart successfully!"
+
+msgid "Erreur lors de l'ajout au panier"
+msgstr "Error adding to cart"
+
+msgid "Connexion réussie !"
+msgstr "Login successful!"
+
+msgid "Email ou mot de passe incorrect"
+msgstr "Incorrect email or password"
+
+msgid "Inscription réussie !"
+msgstr "Registration successful!"
+
+msgid "Cet email est déjà utilisé"
+msgstr "This email is already in use"
+
+# Common
+msgid "Oui"
+msgstr "Yes"
+
+msgid "Non"
+msgstr "No"
+
+msgid "Annuler"
+msgstr "Cancel"
+
+msgid "Confirmer"
+msgstr "Confirm"
+
+msgid "Supprimer"
+msgstr "Delete"
+
+msgid "Modifier"
+msgstr "Edit"
+
+msgid "Enregistrer"
+msgstr "Save"
+
+msgid "Retour"
+msgstr "Back"
+
+msgid "Suivant"
+msgstr "Next"
+
+msgid "Précédent"
+msgstr "Previous"
+
+msgid "Chargement..."
+msgstr "Loading..."
