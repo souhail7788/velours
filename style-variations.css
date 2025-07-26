@@ -1,0 +1,226 @@
+/* 🎨 VARIATIONS DE STYLE POUR VELOURS PARFUM */
+
+/* ========================================
+   THÈME 1: LUXE MODERNE (ACTUEL)
+   ======================================== */
+.theme-luxury {
+    --primary-color: #1a1a2e;
+    --secondary-color: #16213e;
+    --accent-color: #e94560;
+    --gold-accent: #f39c12;
+    --gradient-luxury: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    --gradient-accent: linear-gradient(135deg, #e94560 0%, #f39c12 100%);
+}
+
+/* ========================================
+   THÈME 2: ÉLÉGANCE DORÉE
+   ======================================== */
+.theme-gold {
+    --primary-color: #2c1810;
+    --secondary-color: #3d2817;
+    --accent-color: #d4af37;
+    --gold-accent: #ffd700;
+    --gradient-luxury: linear-gradient(135deg, #2c1810 0%, #3d2817 50%, #1a0f08 100%);
+    --gradient-accent: linear-gradient(135deg, #d4af37 0%, #ffd700 100%);
+}
+
+/* ========================================
+   THÈME 3: MINIMALISME ROSE
+   ======================================== */
+.theme-rose {
+    --primary-color: #2d3436;
+    --secondary-color: #636e72;
+    --accent-color: #fd79a8;
+    --gold-accent: #e84393;
+    --gradient-luxury: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #74b9ff 100%);
+    --gradient-accent: linear-gradient(135deg, #fd79a8 0%, #e84393 100%);
+}
+
+/* ========================================
+   THÈME 4: NATURE VERTE
+   ======================================== */
+.theme-nature {
+    --primary-color: #2d3436;
+    --secondary-color: #636e72;
+    --accent-color: #00b894;
+    --gold-accent: #00cec9;
+    --gradient-luxury: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #55a3ff 100%);
+    --gradient-accent: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+}
+
+/* ========================================
+   THÈME 5: SOMBRE VIOLET
+   ======================================== */
+.theme-purple {
+    --primary-color: #2d1b69;
+    --secondary-color: #3742fa;
+    --accent-color: #a55eea;
+    --gold-accent: #8c7ae6;
+    --gradient-luxury: linear-gradient(135deg, #2d1b69 0%, #3742fa 50%, #5f27cd 100%);
+    --gradient-accent: linear-gradient(135deg, #a55eea 0%, #8c7ae6 100%);
+}
+
+/* ========================================
+   INSTRUCTIONS D'UTILISATION
+   ======================================== */
+
+/*
+Pour changer le thème, ajoutez une de ces classes au body :
+
+1. Thème Luxe Moderne (par défaut) :
+   <body class="theme-luxury">
+
+2. Thème Élégance Dorée :
+   <body class="theme-gold">
+
+3. Thème Minimalisme Rose :
+   <body class="theme-rose">
+
+4. Thème Nature Verte :
+   <body class="theme-nature">
+
+5. Thème Sombre Violet :
+   <body class="theme-purple">
+
+Ou via JavaScript :
+document.body.className = 'theme-gold';
+*/
+
+/* ========================================
+   STYLES SAISONNIERS
+   ======================================== */
+
+/* Thème Noël */
+.theme-christmas {
+    --primary-color: #0f5132;
+    --secondary-color: #198754;
+    --accent-color: #dc3545;
+    --gold-accent: #ffc107;
+    --gradient-luxury: linear-gradient(135deg, #0f5132 0%, #198754 50%, #20c997 100%);
+    --gradient-accent: linear-gradient(135deg, #dc3545 0%, #ffc107 100%);
+}
+
+/* Thème Saint-Valentin */
+.theme-valentine {
+    --primary-color: #6f1e51;
+    --secondary-color: #a4133c;
+    --accent-color: #ff006e;
+    --gold-accent: #ffb3c6;
+    --gradient-luxury: linear-gradient(135deg, #6f1e51 0%, #a4133c 50%, #c9184a 100%);
+    --gradient-accent: linear-gradient(135deg, #ff006e 0%, #ffb3c6 100%);
+}
+
+/* Thème Été */
+.theme-summer {
+    --primary-color: #0077b6;
+    --secondary-color: #0096c7;
+    --accent-color: #ffd60a;
+    --gold-accent: #ffb700;
+    --gradient-luxury: linear-gradient(135deg, #0077b6 0%, #0096c7 50%, #00b4d8 100%);
+    --gradient-accent: linear-gradient(135deg, #ffd60a 0%, #ffb700 100%);
+}
+
+/* ========================================
+   SÉLECTEUR DE THÈME INTERACTIF
+   ======================================== */
+
+.theme-selector {
+    position: fixed;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    z-index: 1000;
+    background: white;
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    display: none; /* Masqué par défaut */
+}
+
+.theme-selector.active {
+    display: block;
+}
+
+.theme-option {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin: 5px 0;
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.3s ease;
+}
+
+.theme-option:hover {
+    transform: scale(1.1);
+    border-color: #333;
+}
+
+.theme-option.luxury { background: linear-gradient(135deg, #1a1a2e, #e94560); }
+.theme-option.gold { background: linear-gradient(135deg, #2c1810, #d4af37); }
+.theme-option.rose { background: linear-gradient(135deg, #2d3436, #fd79a8); }
+.theme-option.nature { background: linear-gradient(135deg, #2d3436, #00b894); }
+.theme-option.purple { background: linear-gradient(135deg, #2d1b69, #a55eea); }
+
+/* ========================================
+   ANIMATIONS SPÉCIALES PAR THÈME
+   ======================================== */
+
+.theme-gold .product-card:hover {
+    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+}
+
+.theme-rose .hero-section {
+    background: linear-gradient(135deg, #fd79a8, #e84393, #74b9ff);
+}
+
+.theme-nature .btn-primary {
+    background: linear-gradient(135deg, #00b894, #00cec9);
+}
+
+.theme-purple .navbar {
+    backdrop-filter: blur(10px);
+    background-color: rgba(45, 27, 105, 0.9) !important;
+}
+
+/* ========================================
+   MODE SOMBRE
+   ======================================== */
+
+.dark-mode {
+    --bg-light: #1a1a1a;
+    --bg-white: #2d2d2d;
+    --text-dark: #ffffff;
+    --text-light: #cccccc;
+    --border-light: #404040;
+}
+
+.dark-mode .navbar {
+    background-color: rgba(0, 0, 0, 0.9) !important;
+}
+
+.dark-mode .card {
+    background-color: var(--bg-white);
+    color: var(--text-dark);
+}
+
+/* ========================================
+   ACCESSIBILITÉ
+   ======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-light: #1a1a1a;
+        --bg-white: #2d2d2d;
+        --text-dark: #ffffff;
+        --text-light: #cccccc;
+    }
+}
