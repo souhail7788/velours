@@ -1,0 +1,85 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Ajouter une catégorie - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Ajouter une catégorie</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('admin_categories') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label for="name" class="form-label">Nom de la catégorie *</label>
+                        <input type="text" class="form-control" id="name" name="name" required
+                               placeholder="ex: Parfums pour homme, Parfums pour femme...">
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"
+                                  placeholder="Description de la catégorie (optionnel)"></textarea>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin_categories') }}" class="btn btn-secondary me-md-2">
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Ajouter la catégorie
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="mb-0">Conseils</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Nom:</strong> Utilisez un nom clair et descriptif
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Description:</strong> Expliquez le type de produits dans cette catégorie
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Organisation:</strong> Créez des catégories logiques pour faciliter la navigation
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Exemples de catégories</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li><i class="fas fa-tag text-primary"></i> Parfums pour homme</li>
+                    <li><i class="fas fa-tag text-primary"></i> Parfums pour femme</li>
+                    <li><i class="fas fa-tag text-primary"></i> Parfums mixtes</li>
+                    <li><i class="fas fa-tag text-primary"></i> Eaux de toilette</li>
+                    <li><i class="fas fa-tag text-primary"></i> Eaux de parfum</li>
+                    <li><i class="fas fa-tag text-primary"></i> Parfums de luxe</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

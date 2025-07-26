@@ -1,0 +1,212 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Gestion des produits - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ _('Gestion des produits') }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('admin_add_product') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> {{ _('Ajouter un produit') }}
+            </a>
+        </div>
+        {% if products.items %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteAllModal">
+                <i class="fas fa-trash-alt"></i> {{ _('Supprimer tous les produits') }}
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        {% if products.items %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Image</th>
+                        <th>Nom</th>
+                        <th>Marque</th>
+                        <th>Catégorie</th>
+                        <th>Prix</th>
+                        <th>Stock</th>
+                        <th>Statut</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products.items %}
+                    <tr>
+                        <td>
+                            {% if product.image_filename %}
+                            <img src="{{ url_for('static', filename='images/products/' + product.image_filename) }}" 
+                                 class="img-thumbnail" style="width: 50px; height: 50px; object-fit: cover;" 
+                                 alt="{{ product.name }}">
+                            {% else %}
+                            <div class="bg-light d-flex align-items-center justify-content-center" 
+                                 style="width: 50px; height: 50px;">
+                                <i class="fas fa-image text-muted"></i>
+                            </div>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <strong>{{ product.name }}</strong>
+                            {% if product.volume %}
+                            <br><small class="text-muted">{{ product.volume }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ product.brand or '-' }}</td>
+                        <td>{{ product.category.name if product.category else '-' }}</td>
+                        <td>{{ "%.2f"|format(product.price) }} €</td>
+                        <td>
+                            {% if product.stock <= 5 and product.stock > 0 %}
+                            <span class="badge bg-warning">{{ product.stock }}</span>
+                            {% elif product.stock == 0 %}
+                            <span class="badge bg-danger">{{ product.stock }}</span>
+                            {% else %}
+                            <span class="badge bg-success">{{ product.stock }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if product.is_active %}
+                            <span class="badge bg-success">Actif</span>
+                            {% else %}
+                            <span class="badge bg-secondary">Inactif</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('product_detail', id=product.id) }}" 
+                                   class="btn btn-info btn-sm" target="_blank" title="Voir">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('admin_edit_product', id=product.id) }}"
+                                   class="btn btn-warning btn-sm" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <form method="POST" action="{{ url_for('admin_toggle_product', id=product.id) }}"
+                                      class="d-inline">
+                                    <button type="submit" class="btn btn-{{ 'secondary' if product.is_active else 'success' }} btn-sm"
+                                            title="{{ 'Désactiver' if product.is_active else 'Activer' }}">
+                                        <i class="fas fa-{{ 'eye-slash' if product.is_active else 'eye' }}"></i>
+                                    </button>
+                                </form>
+                                {% if product.order_items|length == 0 %}
+                                <form method="POST" action="{{ url_for('admin_delete_product', id=product.id) }}"
+                                      class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer définitivement ce produit ?')">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Supprimer définitivement">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <button type="button" class="btn btn-danger btn-sm" disabled
+                                        title="Impossible de supprimer : produit référencé dans {{ product.order_items|length }} commande(s)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if products.pages > 1 %}
+        <nav aria-label="Navigation des produits">
+            <ul class="pagination justify-content-center">
+                {% if products.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin_products', page=products.prev_num) }}">
+                        Précédent
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in products.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != products.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin_products', page=page_num) }}">
+                                {{ page_num }}
+                            </a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if products.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin_products', page=products.next_num) }}">
+                        Suivant
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-box fa-3x text-muted mb-3"></i>
+            <h4>Aucun produit</h4>
+            <p class="text-muted">Commencez par ajouter votre premier produit.</p>
+            <a href="{{ url_for('admin_add_product') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Ajouter un produit
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de confirmation pour supprimer tous les produits -->
+<div class="modal fade" id="deleteAllModal" tabindex="-1" aria-labelledby="deleteAllModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title" id="deleteAllModalLabel">
+                    <i class="fas fa-exclamation-triangle"></i> Supprimer tous les produits
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>⚠️ ATTENTION :</strong> Cette action est irréversible !
+                </div>
+                <p>Vous êtes sur le point de supprimer <strong>TOUS les produits</strong> de votre boutique.</p>
+                <p>Cette action va également :</p>
+                <ul>
+                    <li>Supprimer toutes les commandes existantes</li>
+                    <li>Supprimer tous les articles de commande</li>
+                    <li>Supprimer toutes les images des produits</li>
+                </ul>
+                <p class="mb-0"><strong>Êtes-vous absolument certain de vouloir continuer ?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+                <form method="POST" action="{{ url_for('admin_delete_all_products') }}" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Oui, supprimer tout
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Gestion des catégories - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Gestion des catégories</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('admin_add_category') }}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Ajouter une catégorie
+        </a>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        {% if categories %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nom</th>
+                        <th>Description</th>
+                        <th>Nombre de produits</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for category in categories %}
+                    <tr>
+                        <td>{{ category.id }}</td>
+                        <td><strong>{{ category.name }}</strong></td>
+                        <td>{{ category.description or '-' }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ category.products|length }} produit(s)</span>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('products', category=category.id) }}" 
+                                   class="btn btn-info btn-sm" target="_blank" title="Voir les produits">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{{ url_for('admin_edit_category', id=category.id) }}" 
+                                   class="btn btn-warning btn-sm" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% if category.products|length == 0 %}
+                                <form method="POST" action="{{ url_for('admin_delete_category', id=category.id) }}" 
+                                      class="d-inline" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')">
+                                    <button type="submit" class="btn btn-danger btn-sm" title="Supprimer">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                                {% else %}
+                                <button type="button" class="btn btn-danger btn-sm" disabled 
+                                        title="Impossible de supprimer une catégorie contenant des produits">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-tags fa-3x text-muted mb-3"></i>
+            <h4>Aucune catégorie</h4>
+            <p class="text-muted">Commencez par créer votre première catégorie pour organiser vos produits.</p>
+            <a href="{{ url_for('admin_add_category') }}" class="btn btn-success">
+                <i class="fas fa-plus"></i> Ajouter une catégorie
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+{% if categories %}
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="mb-0">Statistiques des catégories</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    {% for category in categories %}
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-primary h-100">
+                            <div class="card-body">
+                                <div class="text-center">
+                                    <h5 class="card-title">{{ category.name }}</h5>
+                                    <p class="card-text">
+                                        <span class="h4 text-primary">{{ category.products|length }}</span><br>
+                                        <small class="text-muted">produit(s)</small>
+                                    </p>
+                                    <a href="{{ url_for('products', category=category.id) }}" 
+                                       class="btn btn-outline-primary btn-sm" target="_blank">
+                                        Voir les produits
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

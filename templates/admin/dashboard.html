@@ -1,0 +1,190 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard Admin - Velours Parfum{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ _('Dashboard') }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-sm btn-outline-secondary">
+                <i class="fas fa-download"></i> {{ _('Exporter') }}
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Cards -->
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-primary shadow h-100 py-2 admin-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                            {{ _('Total Produits') }}
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_products }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-box fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-success shadow h-100 py-2 admin-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                            {{ _('Total Commandes') }}
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_orders }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-shopping-cart fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-info shadow h-100 py-2 admin-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                            {{ _('Utilisateurs') }}
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ total_users }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-users fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card border-left-warning shadow h-100 py-2 admin-card">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                            {{ _('Commandes en attente') }}
+                        </div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">{{ pending_orders }}</div>
+                    </div>
+                    <div class="col-auto">
+                        <i class="fas fa-clock fa-2x text-gray-300"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent Orders -->
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                <h6 class="m-0 font-weight-bold text-primary">{{ _('Commandes récentes') }}</h6>
+                <a href="{{ url_for('admin_orders') }}" class="btn btn-primary btn-sm">
+                    {{ _('Voir toutes les commandes') }}
+                </a>
+            </div>
+            <div class="card-body">
+                {% if recent_orders %}
+                <div class="table-responsive">
+                    <table class="table table-bordered" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>{{ _('Client') }}</th>
+                                <th>{{ _('Date') }}</th>
+                                <th>{{ _('Statut') }}</th>
+                                <th>{{ _('Total') }}</th>
+                                <th>{{ _('Actions') }}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in recent_orders %}
+                            <tr>
+                                <td>#{{ order.id }}</td>
+                                <td>{{ order.user.username }}</td>
+                                <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    <span class="badge order-status status-{{ order.status }}">
+                                        {% if order.status == 'pending' %}{{ _('En attente') }}
+                                        {% elif order.status == 'confirmed' %}{{ _('Confirmée') }}
+                                        {% elif order.status == 'shipped' %}{{ _('Expédiée') }}
+                                        {% elif order.status == 'delivered' %}{{ _('Livrée') }}
+                                        {% elif order.status == 'cancelled' %}{{ _('Annulée') }}
+                                        {% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ "%.2f"|format(order.total_amount) }} €</td>
+                                <td>
+                                    <a href="{{ url_for('admin_order_detail', id=order.id) }}" 
+                                       class="btn btn-info btn-sm">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted text-center">{{ _('Aucune commande récente') }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="row">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ _('Actions rapides') }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <a href="{{ url_for('admin_add_product') }}" class="btn btn-success">
+                        <i class="fas fa-plus"></i> {{ _('Ajouter un produit') }}
+                    </a>
+                    <a href="{{ url_for('admin_add_category') }}" class="btn btn-info">
+                        <i class="fas fa-plus"></i> {{ _('Ajouter une catégorie') }}
+                    </a>
+                    <a href="{{ url_for('admin_orders', status='pending') }}" class="btn btn-warning">
+                        <i class="fas fa-clock"></i> {{ _('Voir les commandes en attente') }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ _('Informations système') }}</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li><strong>{{ _('Version') }}:</strong> 1.0.0</li>
+                    <li><strong>{{ _('Dernière mise à jour') }}:</strong> {{ current_date }}</li>
+                    <li><strong>{{ _('Statut') }}:</strong> <span class="text-success">{{ _('Opérationnel') }}</span></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

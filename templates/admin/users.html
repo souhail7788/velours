@@ -1,0 +1,294 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Gestion des utilisateurs - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{ _('Gestion des utilisateurs') }}</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <button type="button" class="btn btn-outline-secondary dropdown-toggle" data-bs-toggle="dropdown">
+                <i class="fas fa-filter"></i> {{ _('Filtrer') }}
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="{{ url_for('admin_users') }}">{{ _('Tous les utilisateurs') }}</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_users', filter='admin') }}">{{ _('Administrateurs') }}</a></li>
+                <li><a class="dropdown-item" href="{{ url_for('admin_users', filter='regular') }}">{{ _('Utilisateurs réguliers') }}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<!-- Statistiques rapides -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Total Utilisateurs</h6>
+                        <h3 class="mb-0">{{ users.total }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-users fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Administrateurs</h6>
+                        <h3 class="mb-0">{{ admin_count }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-shield fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Avec Commandes</h6>
+                        <h3 class="mb-0">{{ users_with_orders }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-shopping-cart fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-white">
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <h6 class="card-title">Nouveaux (7j)</h6>
+                        <h3 class="mb-0">{{ recent_users }}</h3>
+                    </div>
+                    <div class="align-self-center">
+                        <i class="fas fa-user-plus fa-2x"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card shadow">
+    <div class="card-body">
+        {% if users.items %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>{{ _('Nom d\'utilisateur') }}</th>
+                        <th>{{ _('Email') }}</th>
+                        <th>{{ _('Type') }}</th>
+                        <th>{{ _('Date d\'inscription') }}</th>
+                        <th>{{ _('Commandes') }}</th>
+                        <th>{{ _('Total dépensé') }}</th>
+                        <th>{{ _('Actions') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users.items %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>
+                            <strong>{{ user.username }}</strong>
+                            {% if user.is_admin %}
+                            <span class="badge bg-danger ms-1">Admin</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ user.email }}</td>
+                        <td>
+                            {% if user.is_admin %}
+                            <span class="badge bg-danger">{{ _('Administrateur') }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ _('Utilisateur') }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <small>{{ user.created_at.strftime('%d/%m/%Y à %H:%M') }}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-info">{{ user.orders|length }} {{ _('commande(s)') }}</span>
+                        </td>
+                        <td>
+                            {% set total_spent = user.orders|sum(attribute='total_amount') %}
+                            <strong>{{ "%.2f"|format(total_spent) }} €</strong>
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('admin_user_detail', id=user.id) }}" 
+                                   class="btn btn-info btn-sm" title="Voir détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% if not user.is_admin or user.id != current_user.id %}
+                                <button type="button" class="btn btn-warning btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#toggleAdminModal{{ user.id }}"
+                                        title="{{ 'Retirer admin' if user.is_admin else 'Promouvoir admin' }}">
+                                    <i class="fas fa-{{ 'user-minus' if user.is_admin else 'user-plus' }}"></i>
+                                </button>
+                                {% endif %}
+                                {% if user.id != current_user.id %}
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#deleteUserModal{{ user.id }}"
+                                        title="Supprimer utilisateur">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        {% if users.pages > 1 %}
+        <nav aria-label="Navigation des utilisateurs">
+            <ul class="pagination justify-content-center">
+                {% if users.has_prev %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin_users', page=users.prev_num) }}">Précédent</a>
+                </li>
+                {% endif %}
+                
+                {% for page_num in users.iter_pages() %}
+                    {% if page_num %}
+                        {% if page_num != users.page %}
+                        <li class="page-item">
+                            <a class="page-link" href="{{ url_for('admin_users', page=page_num) }}">{{ page_num }}</a>
+                        </li>
+                        {% else %}
+                        <li class="page-item active">
+                            <span class="page-link">{{ page_num }}</span>
+                        </li>
+                        {% endif %}
+                    {% else %}
+                    <li class="page-item disabled">
+                        <span class="page-link">…</span>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if users.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{{ url_for('admin_users', page=users.next_num) }}">Suivant</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+
+        {% else %}
+        <div class="text-center py-5">
+            <i class="fas fa-users fa-3x text-muted mb-3"></i>
+            <h4>Aucun utilisateur</h4>
+            <p class="text-muted">Il n'y a aucun utilisateur dans la base de données.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modals pour changer le statut admin -->
+{% for user in users.items %}
+{% if not user.is_admin or user.id != current_user.id %}
+<div class="modal fade" id="toggleAdminModal{{ user.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    {{ 'Retirer les droits administrateur' if user.is_admin else 'Promouvoir administrateur' }}
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <p>Êtes-vous sûr de vouloir 
+                    {% if user.is_admin %}
+                    <strong>retirer les droits administrateur</strong> à <strong>{{ user.username }}</strong> ?
+                    {% else %}
+                    <strong>promouvoir</strong> <strong>{{ user.username }}</strong> en tant qu'<strong>administrateur</strong> ?
+                    {% endif %}
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form method="POST" action="{{ url_for('admin_toggle_user_admin', id=user.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-{{ 'warning' if user.is_admin else 'success' }}">
+                        {{ 'Retirer admin' if user.is_admin else 'Promouvoir admin' }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+<!-- Modals pour supprimer les utilisateurs -->
+{% for user in users.items %}
+{% if user.id != current_user.id %}
+<div class="modal fade" id="deleteUserModal{{ user.id }}" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Supprimer l'utilisateur
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>⚠️ ATTENTION :</strong> Cette action est irréversible !
+                </div>
+                <p>Vous êtes sur le point de supprimer l'utilisateur <strong>{{ user.username }}</strong> ({{ user.email }}).</p>
+
+                {% if user.orders|length > 0 %}
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-info-circle"></i> Cet utilisateur a des commandes :</h6>
+                    <ul class="mb-0">
+                        <li><strong>{{ user.orders|length }} commande(s)</strong> seront supprimées</li>
+                        <li>Tous les <strong>articles de commande</strong> associés seront supprimés</li>
+                        <li>Total dépensé : <strong>{{ "%.2f"|format(user.orders|sum(attribute='total_amount')) }} €</strong></li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Cet utilisateur n'a aucune commande. La suppression sera simple.
+                </div>
+                {% endif %}
+
+                <p class="mb-0"><strong>Êtes-vous absolument certain de vouloir continuer ?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+                <form method="POST" action="{{ url_for('admin_delete_user', id=user.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Oui, supprimer définitivement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endfor %}
+
+{% endblock %}

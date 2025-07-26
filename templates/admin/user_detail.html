@@ -1,0 +1,270 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Détails utilisateur - {{ user.username }} - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">
+        <i class="fas fa-user"></i> Détails de l'utilisateur
+    </h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <div class="btn-group me-2">
+            <a href="{{ url_for('admin_users') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-arrow-left"></i> Retour à la liste
+            </a>
+        </div>
+        {% if user.id != current_user.id %}
+        <div class="btn-group">
+            <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#deleteUserDetailModal">
+                <i class="fas fa-trash-alt"></i> Supprimer cet utilisateur
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="row">
+    <!-- Informations générales -->
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-primary text-white">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-info-circle"></i> Informations générales
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>ID:</strong></div>
+                    <div class="col-sm-8">{{ user.id }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Nom:</strong></div>
+                    <div class="col-sm-8">
+                        {{ user.username }}
+                        {% if user.is_admin %}
+                        <span class="badge bg-danger ms-1">Admin</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Email:</strong></div>
+                    <div class="col-sm-8">{{ user.email }}</div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Type:</strong></div>
+                    <div class="col-sm-8">
+                        {% if user.is_admin %}
+                        <span class="badge bg-danger">Administrateur</span>
+                        {% else %}
+                        <span class="badge bg-secondary">Utilisateur</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4"><strong>Inscrit le:</strong></div>
+                    <div class="col-sm-8">
+                        {{ user.created_at.strftime('%d/%m/%Y à %H:%M') }}
+                        <br><small class="text-muted">Il y a {{ days_since_registration }} jour(s)</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistiques -->
+        <div class="card shadow mb-4">
+            <div class="card-header bg-info text-white">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-chart-bar"></i> Statistiques
+                </h6>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-sm-6"><strong>Commandes:</strong></div>
+                    <div class="col-sm-6">
+                        <span class="badge bg-info">{{ user.orders|length }}</span>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-6"><strong>Total dépensé:</strong></div>
+                    <div class="col-sm-6">
+                        {% set total_spent = user.orders|sum(attribute='total_amount') %}
+                        <strong class="text-success">{{ "%.2f"|format(total_spent) }} €</strong>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-6"><strong>Panier moyen:</strong></div>
+                    <div class="col-sm-6">
+                        {% if user.orders|length > 0 %}
+                        {% set avg_order = total_spent / user.orders|length %}
+                        <strong>{{ "%.2f"|format(avg_order) }} €</strong>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-6"><strong>Dernière commande:</strong></div>
+                    <div class="col-sm-6">
+                        {% if user.orders %}
+                        {% set last_order = user.orders|sort(attribute='created_at', reverse=true)|first %}
+                        <small>{{ last_order.created_at.strftime('%d/%m/%Y') }}</small>
+                        {% else %}
+                        <span class="text-muted">Aucune</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Historique des commandes -->
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-shopping-cart"></i> Historique des commandes ({{ user.orders|length }})
+                </h6>
+            </div>
+            <div class="card-body">
+                {% if user.orders %}
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Date</th>
+                                <th>Statut</th>
+                                <th>Articles</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for order in user.orders|sort(attribute='created_at', reverse=true) %}
+                            <tr>
+                                <td><strong>#{{ order.id }}</strong></td>
+                                <td>{{ order.created_at.strftime('%d/%m/%Y') }}</td>
+                                <td>
+                                    {% if order.status == 'pending' %}
+                                    <span class="badge bg-warning">En attente</span>
+                                    {% elif order.status == 'confirmed' %}
+                                    <span class="badge bg-info">Confirmée</span>
+                                    {% elif order.status == 'shipped' %}
+                                    <span class="badge bg-primary">Expédiée</span>
+                                    {% elif order.status == 'delivered' %}
+                                    <span class="badge bg-success">Livrée</span>
+                                    {% elif order.status == 'cancelled' %}
+                                    <span class="badge bg-danger">Annulée</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="badge bg-secondary">{{ order.items|length }} article(s)</span>
+                                </td>
+                                <td><strong>{{ "%.2f"|format(order.total_amount) }} €</strong></td>
+                                <td>
+                                    <a href="{{ url_for('admin_order_detail', id=order.id) }}" 
+                                       class="btn btn-info btn-sm" title="Voir détails">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="text-center py-4">
+                    <i class="fas fa-shopping-cart fa-3x text-muted mb-3"></i>
+                    <h5>Aucune commande</h5>
+                    <p class="text-muted">Cet utilisateur n'a encore passé aucune commande.</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Produits les plus achetés -->
+        {% if user.orders %}
+        <div class="card shadow mt-4">
+            <div class="card-header bg-warning text-dark">
+                <h6 class="m-0 font-weight-bold">
+                    <i class="fas fa-star"></i> Produits favoris
+                </h6>
+            </div>
+            <div class="card-body">
+                {% set product_counts = {} %}
+                {% for order in user.orders %}
+                    {% for item in order.items %}
+                        {% if product_counts.update({item.product.name: product_counts.get(item.product.name, 0) + item.quantity}) %}{% endif %}
+                    {% endfor %}
+                {% endfor %}
+                
+                {% if product_counts %}
+                <div class="row">
+                    {% for product_name, quantity in product_counts.items()[:6] %}
+                    <div class="col-md-6 mb-2">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span>{{ product_name }}</span>
+                            <span class="badge bg-primary">{{ quantity }}x</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted mb-0">Aucun produit acheté.</p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Modal de suppression pour la page de détail -->
+{% if user.id != current_user.id %}
+<div class="modal fade" id="deleteUserDetailModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-danger text-white">
+                <h5 class="modal-title">
+                    <i class="fas fa-exclamation-triangle"></i> Supprimer l'utilisateur
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-danger">
+                    <strong>⚠️ ATTENTION :</strong> Cette action est irréversible !
+                </div>
+                <p>Vous êtes sur le point de supprimer l'utilisateur <strong>{{ user.username }}</strong> ({{ user.email }}).</p>
+
+                {% if user.orders|length > 0 %}
+                <div class="alert alert-warning">
+                    <h6><i class="fas fa-info-circle"></i> Cet utilisateur a des commandes :</h6>
+                    <ul class="mb-0">
+                        <li><strong>{{ user.orders|length }} commande(s)</strong> seront supprimées</li>
+                        <li>Tous les <strong>articles de commande</strong> associés seront supprimés</li>
+                        <li>Total dépensé : <strong>{{ "%.2f"|format(user.orders|sum(attribute='total_amount')) }} €</strong></li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle"></i> Cet utilisateur n'a aucune commande. La suppression sera simple.
+                </div>
+                {% endif %}
+
+                <p class="mb-0"><strong>Êtes-vous absolument certain de vouloir continuer ?</strong></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Annuler
+                </button>
+                <form method="POST" action="{{ url_for('admin_delete_user', id=user.id) }}" class="d-inline">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="fas fa-trash-alt"></i> Oui, supprimer définitivement
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

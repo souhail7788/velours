@@ -1,0 +1,164 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Ajouter un produit - Admin{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Ajouter un produit</h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <a href="{{ url_for('admin_products') }}" class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Retour à la liste
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card shadow">
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="name" class="form-label">Nom du produit *</label>
+                            <input type="text" class="form-control" id="name" name="name" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="brand" class="form-label">Marque</label>
+                            <input type="text" class="form-control" id="brand" name="brand">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Description</label>
+                        <textarea class="form-control" id="description" name="description" rows="4"></textarea>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="price" class="form-label">Prix (€) *</label>
+                            <input type="number" class="form-control" id="price" name="price" 
+                                   step="0.01" min="0" required>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="stock" class="form-label">Stock *</label>
+                            <input type="number" class="form-control" id="stock" name="stock" 
+                                   min="0" required>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="volume" class="form-label">Volume</label>
+                            <input type="text" class="form-control" id="volume" name="volume" 
+                                   placeholder="ex: 50ml, 100ml">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="category_id" class="form-label">Catégorie</label>
+                            <select class="form-select" id="category_id" name="category_id">
+                                <option value="">Sélectionner une catégorie</option>
+                                {% for category in categories %}
+                                <option value="{{ category.id }}">{{ category.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="gender" class="form-label">Genre</label>
+                            <select class="form-select" id="gender" name="gender">
+                                <option value="">Sélectionner un genre</option>
+                                <option value="homme">Homme</option>
+                                <option value="femme">Femme</option>
+                                <option value="mixte">Mixte</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="image" class="form-label">Image du produit</label>
+                        <input type="file" class="form-control" id="image" name="image" 
+                               accept="image/*">
+                        <div class="form-text">Formats acceptés: JPG, PNG, GIF. Taille max: 5MB</div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('admin_products') }}" class="btn btn-secondary me-md-2">
+                            Annuler
+                        </a>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Ajouter le produit
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header">
+                <h6 class="mb-0">Conseils</h6>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled">
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Nom:</strong> Utilisez un nom descriptif et unique
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Description:</strong> Décrivez les notes olfactives et l'occasion d'usage
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Image:</strong> Utilisez une image de haute qualité sur fond blanc
+                    </li>
+                    <li class="mb-2">
+                        <i class="fas fa-lightbulb text-warning"></i>
+                        <strong>Stock:</strong> Mettez à jour régulièrement les quantités
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="card shadow mt-3">
+            <div class="card-header">
+                <h6 class="mb-0">Aperçu de l'image</h6>
+            </div>
+            <div class="card-body text-center">
+                <div id="image-preview" class="mb-3">
+                    <div class="bg-light border rounded d-flex align-items-center justify-content-center" 
+                         style="height: 200px;">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                </div>
+                <small class="text-muted">L'aperçu apparaîtra ici</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('image').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    const preview = document.getElementById('image-preview');
+    
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            preview.innerHTML = `<img src="${e.target.result}" class="img-fluid rounded" style="max-height: 200px;">`;
+        };
+        reader.readAsDataURL(file);
+    } else {
+        preview.innerHTML = `
+            <div class="bg-light border rounded d-flex align-items-center justify-content-center" 
+                 style="height: 200px;">
+                <i class="fas fa-image fa-3x text-muted"></i>
+            </div>
+        `;
+    }
+});
+</script>
+{% endblock %}
