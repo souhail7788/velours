@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}Produits - Velours Parfum{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <!-- Filters Sidebar -->
+        <div class="col-md-3">
+            <div class="filter-section">
+                <h5><i class="fas fa-filter"></i> Filtres</h5>
+                
+                <form method="GET" action="{{ url_for('products') }}">
+                    <!-- Search -->
+                    <div class="mb-3">
+                        <label for="search-input" class="form-label">Recherche</label>
+                        <input type="text" class="form-control search-box" id="search-input" 
+                               name="search" value="{{ search or '' }}" placeholder="Nom du parfum...">
+                    </div>
+                    
+                    <!-- Category Filter -->
+                    <div class="mb-3">
+                        <label for="category-filter" class="form-label">Catégorie</label>
+                        <select class="form-select" id="category-filter" name="category">
+                            <option value="">Toutes les catégories</option>
+                            {% for category in categories %}
+                            <option value="{{ category.id }}" 
+                                    {% if selected_category == category.id %}selected{% endif %}>
+                                {{ category.name }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    
+                    <!-- Price Range -->
+                    <div class="mb-3">
+                        <label class="form-label">Prix</label>
+                        <div class="row">
+                            <div class="col-6">
+                                <input type="number" class="form-control" id="min-price" 
+                                       name="min_price" value="{{ min_price or '' }}" 
+                                       placeholder="Min" step="0.01">
+                            </div>
+                            <div class="col-6">
+                                <input type="number" class="form-control" id="max-price" 
+                                       name="max_price" value="{{ max_price or '' }}" 
+                                       placeholder="Max" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="fas fa-search"></i> Filtrer
+                    </button>
+                    
+                    <a href="{{ url_for('products') }}" class="btn btn-outline-secondary w-100 mt-2">
+                        <i class="fas fa-times"></i> Réinitialiser
+                    </a>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Products Grid -->
+        <div class="col-md-9">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2>Nos Produits</h2>
+                <span class="text-muted">{{ products.total }} produit(s) trouvé(s)</span>
+            </div>
+            
+            {% if products.items %}
+            <div class="row">
+                {% for product in products.items %}
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card product-card">
+                        {% if product.image_filename %}
+                        <img src="{{ url_for('static', filename='images/products/' + product.image_filename) }}" 
+                             class="card-img-top product-image" alt="{{ product.name }}">
+                        {% else %}
+                        <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
+                            <i class="fas fa-image fa-3x text-muted"></i>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text text-muted">
+                                <i class="fas fa-tag"></i> {{ product.brand }}
+                                {% if product.volume %}
+                                | {{ product.volume }}
+                                {% endif %}
+                            </p>
+                            <p class="card-text">{{ product.description[:80] }}{% if product.description|length > 80 %}...{% endif %}</p>
+                            
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="product-price">{{ "%.2f"|format(product.price) }} €</span>
+                                <div class="btn-group">
+                                    <a href="{{ url_for('product_detail', id=product.id) }}" 
+                                       class="btn btn-outline-primary btn-sm">
+                                        <i class="fas fa-eye"></i> Voir
+                                    </a>
+                                    {% if current_user.is_authenticated %}
+                                    <button class="btn btn-primary btn-sm add-to-cart" 
+                                            data-product-id="{{ product.id }}">
+                                        <i class="fas fa-cart-plus"></i>
+                                    </button>
+                                    {% endif %}
+                                </div>
+                            </div>
+                            
+                            {% if product.stock <= 5 and product.stock > 0 %}
+                            <small class="text-warning">
+                                <i class="fas fa-exclamation-triangle"></i> Plus que {{ product.stock }} en stock !
+                            </small>
+                            {% elif product.stock == 0 %}
+                            <small class="text-danger">
+                                <i class="fas fa-times-circle"></i> Rupture de stock
+                            </small>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Pagination -->
+            {% if products.pages > 1 %}
+            <nav aria-label="Navigation des produits">
+                <ul class="pagination justify-content-center">
+                    {% if products.has_prev %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('products', page=products.prev_num, 
+                           search=search, category=selected_category, min_price=min_price, max_price=max_price) }}">
+                            Précédent
+                        </a>
+                    </li>
+                    {% endif %}
+                    
+                    {% for page_num in products.iter_pages() %}
+                        {% if page_num %}
+                            {% if page_num != products.page %}
+                            <li class="page-item">
+                                <a class="page-link" href="{{ url_for('products', page=page_num,
+                                   search=search, category=selected_category, min_price=min_price, max_price=max_price) }}">
+                                    {{ page_num }}
+                                </a>
+                            </li>
+                            {% else %}
+                            <li class="page-item active">
+                                <span class="page-link">{{ page_num }}</span>
+                            </li>
+                            {% endif %}
+                        {% else %}
+                        <li class="page-item disabled">
+                            <span class="page-link">…</span>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if products.has_next %}
+                    <li class="page-item">
+                        <a class="page-link" href="{{ url_for('products', page=products.next_num,
+                           search=search, category=selected_category, min_price=min_price, max_price=max_price) }}">
+                            Suivant
+                        </a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+            
+            {% else %}
+            <div class="text-center py-5">
+                <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                <h4>Aucun produit trouvé</h4>
+                <p class="text-muted">Essayez de modifier vos critères de recherche</p>
+                <a href="{{ url_for('products') }}" class="btn btn-primary">
+                    Voir tous les produits
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+
+{% block title %}Mon profil - Parfume Store{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Profile Sidebar -->
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-user-circle fa-5x text-muted mb-3"></i>
+                    <h5>{{ current_user.username }}</h5>
+                    <p class="text-muted">{{ current_user.email }}</p>
+                    <small class="text-muted">
+                        Membre depuis {{ current_user.created_at.strftime('%B %Y') }}
+                    </small>
+                </div>
+            </div>
+            
+            <div class="list-group mt-3">
+                <a href="#profile-info" class="list-group-item list-group-item-action active" 
+                   data-bs-toggle="tab">
+                    <i class="fas fa-user"></i> Informations personnelles
+                </a>
+                <a href="#order-history" class="list-group-item list-group-item-action" 
+                   data-bs-toggle="tab">
+                    <i class="fas fa-list"></i> Historique des commandes
+                </a>
+                <a href="#change-password" class="list-group-item list-group-item-action" 
+                   data-bs-toggle="tab">
+                    <i class="fas fa-lock"></i> Changer le mot de passe
+                </a>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <div class="tab-content">
+                <!-- Profile Information -->
+                <div class="tab-pane fade show active" id="profile-info">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Informations personnelles</h5>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label for="username" class="form-label">Nom d'utilisateur</label>
+                                        <input type="text" class="form-control" id="username" 
+                                               value="{{ current_user.username }}" readonly>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label for="email" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="email" 
+                                               value="{{ current_user.email }}" readonly>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="join-date" class="form-label">Date d'inscription</label>
+                                    <input type="text" class="form-control" id="join-date" 
+                                           value="{{ current_user.created_at.strftime('%d/%m/%Y à %H:%M') }}" readonly>
+                                </div>
+                                
+                                <div class="alert alert-info">
+                                    <i class="fas fa-info-circle"></i>
+                                    Pour modifier vos informations, contactez notre support client.
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Order History -->
+                <div class="tab-pane fade" id="order-history">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Historique des commandes</h5>
+                            <a href="{{ url_for('orders') }}" class="btn btn-outline-primary btn-sm">
+                                Voir toutes les commandes
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted">
+                                Consultez l'historique complet de vos commandes dans la section dédiée.
+                            </p>
+                            <a href="{{ url_for('orders') }}" class="btn btn-primary">
+                                <i class="fas fa-list"></i> Mes commandes
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Change Password -->
+                <div class="tab-pane fade" id="change-password">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="mb-0">Changer le mot de passe</h5>
+                        </div>
+                        <div class="card-body">
+                            <form id="change-password-form">
+                                <div class="mb-3">
+                                    <label for="current-password" class="form-label">Mot de passe actuel</label>
+                                    <input type="password" class="form-control" id="current-password" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="new-password" class="form-label">Nouveau mot de passe</label>
+                                    <input type="password" class="form-control" id="new-password" required>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="confirm-new-password" class="form-label">Confirmer le nouveau mot de passe</label>
+                                    <input type="password" class="form-control" id="confirm-new-password" required>
+                                </div>
+                                
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i> Changer le mot de passe
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('change-password-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const newPassword = document.getElementById('new-password').value;
+    const confirmPassword = document.getElementById('confirm-new-password').value;
+    
+    if (newPassword !== confirmPassword) {
+        alert('Les nouveaux mots de passe ne correspondent pas !');
+        return;
+    }
+    
+    // Ici, vous pourriez ajouter la logique pour changer le mot de passe
+    alert('Fonctionnalité à implémenter : changement de mot de passe');
+});
+</script>
+{% endblock %}

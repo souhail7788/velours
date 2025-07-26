@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Accueil - Velours Parfum{% endblock %}
+
+{% block content %}
+<!-- Hero Section moderne -->
+<section class="hero-section">
+    <div class="container">
+        <h1>✨ {{ _('Bienvenue chez Velours Parfum') }}</h1>
+        <p class="lead">{{ _('Découvrez notre collection exclusive de parfums de luxe et laissez-vous envoûter par des fragrances veloutées d\'exception') }}</p>
+        <div class="mt-4">
+            <a href="{{ url_for('products') }}" class="btn btn-light btn-lg me-3">
+                <i class="fas fa-shopping-bag me-2"></i>{{ _('Découvrir nos produits') }}
+            </a>
+            <a href="#categories" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-arrow-down me-2"></i>{{ _('Explorer') }}
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section moderne -->
+{% if categories %}
+<section class="py-5" id="categories">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-5 fw-bold text-primary mb-3">{{ _('Nos Catégories') }}</h2>
+            <p class="lead text-muted">Explorez notre univers de fragrances organisé par collections</p>
+        </div>
+        <div class="row g-4">
+            {% for category in categories %}
+            <div class="col-lg-4 col-md-6 mb-4">
+                <div class="card h-100 text-center category-card">
+                    <div class="card-body p-4">
+                        <div class="category-icon mb-4">
+                            <i class="fas fa-gem fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title fw-bold">{{ category.name }}</h5>
+                        <p class="card-text text-muted">{{ category.description or 'Découvrez notre sélection exclusive' }}</p>
+                        <a href="{{ url_for('products', category=category.id) }}" class="btn btn-outline-primary">
+                            <i class="fas fa-arrow-right me-2"></i>Voir les produits
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Featured Products -->
+{% if products %}
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">{{ _('Produits en vedette') }}</h2>
+        <div class="row">
+            {% for product in products %}
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="card product-card">
+                    {% if product.image_filename %}
+                    <img src="{{ url_for('static', filename='images/products/' + product.image_filename) }}" 
+                         class="card-img-top product-image" alt="{{ product.name }}">
+                    {% else %}
+                    <div class="card-img-top product-image bg-light d-flex align-items-center justify-content-center">
+                        <i class="fas fa-image fa-3x text-muted"></i>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.name }}</h5>
+                        <p class="card-text text-muted">{{ product.brand }}</p>
+                        <p class="card-text">{{ product.description[:100] }}{% if product.description|length > 100 %}...{% endif %}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="product-price">{{ "%.2f"|format(product.price) }} €</span>
+                            <div class="btn-group">
+                                <a href="{{ url_for('product_detail', id=product.id) }}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% if current_user.is_authenticated %}
+                                <button class="btn btn-primary btn-sm add-to-cart" data-product-id="{{ product.id }}">
+                                    <i class="fas fa-cart-plus"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        <div class="text-center mt-4">
+            <a href="{{ url_for('products') }}" class="btn btn-primary btn-lg">
+                Voir tous les produits
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+
+<!-- Features Section moderne -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="display-6 fw-bold text-primary mb-3">Pourquoi nous choisir ?</h2>
+            <p class="lead text-muted">Des services premium pour une expérience d'achat exceptionnelle</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="feature-card p-4">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-shipping-fast fa-4x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Livraison Express</h4>
+                    <p class="text-muted">Livraison gratuite pour toute commande supérieure à 50€. Expédition sous 24h.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="feature-card p-4">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-certificate fa-4x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Authenticité Garantie</h4>
+                    <p class="text-muted">Tous nos parfums sont 100% authentiques et proviennent directement des marques officielles.</p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6 text-center">
+                <div class="feature-card p-4">
+                    <div class="feature-icon mb-4">
+                        <i class="fas fa-headset fa-4x text-primary"></i>
+                    </div>
+                    <h4 class="fw-bold mb-3">Support Premium</h4>
+                    <p class="text-muted">Notre équipe d'experts est disponible 7j/7 pour vous conseiller et vous accompagner.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
